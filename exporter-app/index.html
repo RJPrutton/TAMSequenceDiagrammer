@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Braze Mermaid Diagram Exporter</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/assets/Braze_Small_Icon_PURPLE.svg"
+    />
+    <link id="stylesheet" rel="stylesheet" href="styles/styles.css" />
+    <script src="https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js"></script>
+    <script type="module" src="/scripts/mermaid_init.js"></script>
+    <script type="module">
+      import monacoMermaid from "https://cdn.skypack.dev/monaco-mermaid";
+      window.monacoMermaid = monacoMermaid; // Expose it globally if needed
+    </script>
+  </head>
+  <body>
+    <div class="header-section">
+      <img src="assets/Braze_Primary_logo_WHITE.webp" alt="Logo" />
+      <h1 class="header-title">Braze Mermaid Diagram Exporter</h1>
+    </div>
+    <main>
+      <div class="editor-viewport-container">
+        <div class="editor-controls">
+          <div class="font-size-controls">
+            <label for="fontSizeSelect">Font Size:</label>
+            <select id="fontSizeSelect" class="font-size-dropdown">
+              <option value="8px">8</option>
+              <option value="10px">10</option>
+              <option value="12px">12</option>
+              <option value="14px" selected>14</option>
+              <option value="16px">16</option>
+              <option value="18px">18</option>
+              <option value="20px">20</option>
+              <option value="24px">24</option>
+            </select>
+          </div>
+          <div class="zoom-controls">
+            <button id="zoomIn" class="zoom-button">Zoom In</button>
+            <button id="zoomOut" class="zoom-button">Zoom Out</button>
+          </div>
+        </div>
+        <div
+          id="editor-input"
+          class="editor-input"
+          aria-label="Editor input area"
+        ></div>
+        <div class="diagram-viewport">
+          <div
+            id="mermaidDiagram"
+            aria-label="Preview of Mermaid diagram"
+          ></div>
+        </div>
+      </div>
+    </main>
+    <div class="action-buttons">
+      <button id="renderButton" class="action-button">Render Diagram</button>
+      <button id="exportSvgButton" class="action-button">Export as SVG</button>
+      <button id="exportPngButton" class="action-button">Export as PNG</button>
+    </div>
+    <!-- Main JavaScript -->
+    <script src="dist/bundle.js"></script>
+    <!-- Include the bundled JavaScript file -->
+  </body>
+</html>

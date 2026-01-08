@@ -1,0 +1,26 @@
+{
+  "name": "braze-mermaid-diagram-exporter",
+  "version": "1.0.0",
+  "description": "Local web app for viewing and exporting Braze Mermaid sequence diagrams",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "serve": "http-server -p 8080 -c-1",
+    "start": "npm run build && npm run serve",
+    "generate-link": "node utils/scripts/generate-link.js"
+  },
+  "keywords": ["mermaid", "diagram", "braze", "sequence-diagram"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "http-server": "^14.1.1",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.52.2"
+  }
+}
