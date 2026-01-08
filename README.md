@@ -33,7 +33,8 @@ Use the AI assistant (**Cmd+I** or **Cmd+L**) to describe a Braze flow. The assi
 The AI will generate a **Direct Preview Link**. Clicking this link opens your diagram in the cloud-hosted Exporter App, where you can:
 - **Live Edit**: Tweak the code in the browser for final adjustments.
 - **High-Res Export**: Download as **SVG** (recommended for slides) or **PNG**.
-- **Adjust Layout**: Fine-tune font sizes and zoom levels for customer presentations.
+- **Braze Branding** Official Braze branding and styling is applied automatically.
+
 
 ## Features
 
