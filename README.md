@@ -20,76 +20,37 @@ aiTool/
 
 ## Quick Start
 
-### 1. Set Up the Exporter App
-
-```bash
-cd exporter-app
-npm install
-npm run build
-npm run serve
-```
-
-The app will be available at `http://localhost:8080`.
+### 1. Open the Project
+Simply open the `aiTool` folder in **Cursor**. The assistant will automatically load the configuration from `.cursorrules`.
 
 ### 2. Generate Diagrams
-
-Use the AI assistant (configured via `.cursorrules`) to generate Mermaid sequence diagrams. The assistant will:
-
-- Create technically accurate Braze sequence diagrams
-- Follow Braze naming conventions and styling
-- Generate links to pre-load diagrams in the local exporter app
+Use the AI assistant (**Cmd+I** or **Cmd+L**) to describe a Braze flow. The assistant is configured to:
+- Access live documentation via MCP for technical accuracy.
+- Follow Braze naming conventions (SDK, API, Canvas, etc.).
+- Apply official Braze branding and styling automatically.
 
 ### 3. View and Export
-
-Click the generated link to open the diagram in the exporter app, where you can:
-- Edit the diagram code
-- Export as SVG or PNG
-- Adjust font size and zoom
+The AI will generate a **Direct Preview Link**. Clicking this link opens your diagram in the cloud-hosted Exporter App, where you can:
+- **Live Edit**: Tweak the code in the browser for final adjustments.
+- **High-Res Export**: Download as **SVG** (recommended for slides) or **PNG**.
+- **Adjust Layout**: Fine-tune font sizes and zoom levels for customer presentations.
 
 ## Features
 
-- **AI-Powered Generation**: Context-aware diagram creation using MCP and live documentation
-- **Local Exporter App**: View, edit, and export diagrams without external dependencies
-- **URL-Based Sharing**: Pre-load diagrams via URL parameters
-- **Professional Styling**: Braze-branded color scheme and formatting
-- **Export Options**: SVG and PNG export with high-resolution support
+- **AI-Powered Generation**: Context-aware diagram creation using MCP and live documentation.
+- **Zero-Setup Preview**: No local servers required; diagrams load via URL parameters in the hosted web app.
+- **Professional Styling**: Pre-configured Braze-branded color scheme (`#ED1A3B`) and formatting.
+- **Presentation Ready**: Optimized for high-resolution exports suitable for Keynote, PowerPoint, and internal wikis.
 
 ## Documentation
 
-- [Exporter App Setup Guide](exporter-app/SETUP.md) - Detailed setup and usage instructions
-- [Mermaid Reference](docs/mermaid-reference.md) - Mermaid syntax reference
-- [Example Diagrams](diagrams/) - Sample sequence diagrams
+- [Mermaid Reference](docs/mermaid-reference.md) - Mermaid syntax reference.
+- [Example Diagrams](diagrams/) - Sample sequence diagrams for common Braze flows.
 
-## Development
+## Development (Internal)
 
 ### Building the Exporter App
-
+If you need to make changes to the web app interface:
 ```bash
 cd exporter-app
-npm run build        # Production build
-npm run dev          # Development build with watch mode
-```
-
-### Generating Links
-
-```bash
-# Using npm script
-npm run generate-link -- "sequenceDiagram\nA->>B: Hello"
-
-# Or directly
-node utils/scripts/generate-link.js "your mermaid code"
-```
-
-## Configuration
-
-The AI assistant behavior is configured in `.cursorrules`. Key settings:
-
-- Auto-styling with `autonumber` and participant aliases
-- Braze-specific naming conventions
-- Local app link generation (not mermaid.live)
-- Error handling and internal logic notation
-
-## License
-
-ISC
-
+npm run build        # Production build for Vercel deployment
