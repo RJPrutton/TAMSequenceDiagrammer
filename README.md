@@ -27,7 +27,6 @@ Simply open the `aiTool` folder in **Cursor**. The assistant will automatically 
 Use the AI assistant (**Cmd+I** or **Cmd+L**) to describe a Braze flow. The assistant is configured to:
 - Access live documentation via MCP for technical accuracy.
 - Follow Braze naming conventions (SDK, API, Canvas, etc.).
-- Apply official Braze branding and styling automatically.
 
 ### 3. View and Export
 The AI will generate a **Direct Preview Link**. Clicking this link opens your diagram in the cloud-hosted Exporter App, where you can:
