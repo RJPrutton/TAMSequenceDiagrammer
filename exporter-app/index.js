@@ -190,68 +190,59 @@ function onEditorReady() {
       return;
     }
 
-    // Check if html2canvas is available (for flowcharts with foreignObject)
-    if (typeof html2canvas !== 'undefined') {
+    // Detect diagram type by checking the SVG structure
+    // Sequence diagrams typically have a viewBox and work better with the original method
+    // Flowcharts may have foreignObject elements and need html2canvas
+    const viewBox = svgElement.getAttribute("viewBox");
+    const hasForeignObject = svgElement.querySelector("foreignObject") !== null;
+    
+    // For sequence diagrams (have viewBox, no foreignObject), use original method
+    // For flowcharts (may have foreignObject), use html2canvas
+    if (viewBox && !hasForeignObject) {
+      // Use original method for sequence diagrams - more accurate dimensions
+      tryOriginalPngExport();
+    } else if (typeof html2canvas !== 'undefined') {
+      // Use html2canvas for flowcharts with foreignObject
       // Ensure the container is visible and in viewport
       diagramContainer.scrollIntoView({ behavior: 'instant', block: 'nearest' });
       
       // Wait a moment for any layout changes
       setTimeout(() => {
-        // Use html2canvas to capture the container div (works better than SVG element directly)
-        // This works for both sequence diagrams and flowcharts
-        const rect = diagramContainer.getBoundingClientRect();
+        // Use html2canvas to capture the SVG element directly (not container)
+        // This avoids capturing extra whitespace
+        const rect = svgElement.getBoundingClientRect();
         
-        // Get the actual SVG dimensions from viewBox if available
-        let targetWidth = rect.width;
-        let targetHeight = rect.height;
-        
-        if (svgElement) {
-          const viewBox = svgElement.getAttribute("viewBox");
-          if (viewBox) {
-            const [, , vbWidth, vbHeight] = viewBox.split(" ").map(Number);
-            if (vbWidth && vbHeight) {
-              targetWidth = vbWidth;
-              targetHeight = vbHeight;
-            }
-          } else {
-            const svgWidth = parseFloat(svgElement.getAttribute("width")) || rect.width;
-            const svgHeight = parseFloat(svgElement.getAttribute("height")) || rect.height;
-            targetWidth = svgWidth;
-            targetHeight = svgHeight;
-          }
-        }
-        
-        html2canvas(diagramContainer, {
+        html2canvas(svgElement, {
           backgroundColor: '#ffffff',
           scale: 3, // Higher resolution
           useCORS: true,
           allowTaint: false,
           logging: false,
-          width: Math.max(targetWidth, 800),
-          height: Math.max(targetHeight, 600)
+          width: rect.width,
+          height: rect.height
         }).then(function(canvas) {
-        canvas.toBlob(function(blob) {
-          if (!blob) {
-            // Fallback to original method
-            tryOriginalPngExport();
-            return;
-          }
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "diagram.png";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        }, "image/png", 1.0);
+          canvas.toBlob(function(blob) {
+            if (!blob) {
+              // Fallback to original method
+              tryOriginalPngExport();
+              return;
+            }
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "diagram.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          }, "image/png", 1.0);
         }).catch(function(error) {
           console.error("html2canvas failed, trying fallback:", error);
           tryOriginalPngExport();
         });
       }, 100);
     } else {
-      // Fallback to original method (works for sequence diagrams)
+      // Fallback to original method
       tryOriginalPngExport();
     }
 
