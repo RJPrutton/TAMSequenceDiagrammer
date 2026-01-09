@@ -1,13 +1,12 @@
 # Braze Technical Sequence Diagram Tool
 
-A specialized tool for Braze TAMs to quickly generate, view, and export professional Mermaid sequence diagrams using AI assistance.
+A specialized tool for Braze TAMs to quickly generate, view, and export professional Mermaid diagrams using AI assistance.
 
 ## Project Structure
 
 ```
 aiTool/
-├── diagrams/              # Example Mermaid sequence diagrams
-├── docs/                  # Documentation and references
+├── diagrams/              # Example Mermaid diagrams + Outputted Mermaid diagrams
 ├── exporter-app/          # Local web application for viewing/exporting diagrams
 │   ├── assets/           # Branding assets
 │   ├── dist/             # Built application (generated)
