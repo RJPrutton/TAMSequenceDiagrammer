@@ -18,44 +18,62 @@
       window.monacoMermaid = monacoMermaid; // Expose it globally if needed
     </script>
     <script>
-      // Initialize Mermaid with theme configuration
+      // Initialize Mermaid with refined Braze brand colors (Technical Professional tone)
+      // Braze Brand Hierarchy:
+      // Primary Backgrounds (Softer): Light Orange (#FFD4BC), Light Purple (#C9C4EF)
+      // Borders (Brand Pop): Orange (#FFA524), Purple (#801ED7)
+      // Lines & Text (Anchor): Dark Purple (#300266)
+      // Notes: Light Pink (#F8D3E8) with Pink border (#FFA4FB)
+      // Signals: Dark Pink (#91186E) for subtle contrast
+      
       const themeVariables = {
         darkMode: false,
         background: "#ffffff",
         fontFamily: "helvetica neue, helvetica, arial, sans-serif",
         fontSize: "16px",
-        primaryColor: "#fff4dd",
-        primaryTextColor: "#300266",
-        secondaryColor: "#c9c4ef",
-        primaryBorderColor: "#300266",
-        secondaryBorderColor: "#ffd4bc",
-        noteBkgColor: "#ffe5b4",
-        noteTextColor: "#333333",
-        noteBorderColor: "#ffa524",
-        lineColor: "#300266",
-        textColor: "#300266",
-        mainBkg: "#c9c4ef",
-        errorBkgColor: "#f8d3e8",
-        errorTextColor: "#91186e",
-        actorBkg: "#c9c4ef",
-        actorBorder: "#300266",
-        actorTextColor: "#300266",
-        actorLineColor: "#f8d3e8",
-        signalColor: "#300266",
-        signalTextColor: "#300266",
-        labelBoxBkgColor: "#ffe0b2",
-        labelBoxBorderColor: "#ffd4bc",
-        labelTextColor: "#300266",
-        loopTextColor: "#300266",
-        activationBorderColor: "#91186E",
-        activationBkgColor: "#f8d3e8",
-        sequenceNumberColor: "#300266",
+        
+        // Flowchart-specific variables (applies to flowcharts)
+        primaryColor: "#FFD4BC", // Light Orange for primary nodes/boxes (softer)
+        primaryTextColor: "#300266", // Dark Purple for node text (anchor)
+        primaryBorderColor: "#FFA524", // Orange for node borders (brand pop)
+        lineColor: "#300266", // Dark Purple for edges/arrows (anchor)
+        secondaryColor: "#C9C4EF", // Light Purple for secondary nodes (softer)
+        secondaryTextColor: "#300266", // Dark Purple for secondary text
+        secondaryBorderColor: "#801ED7", // Purple for secondary borders (brand pop)
+        tertiaryColor: "#FFD4BC", // Light Orange for tertiary elements
+        tertiaryTextColor: "#300266", // Dark Purple for tertiary text
+        tertiaryBorderColor: "#FFA524", // Orange for tertiary borders
+        
+        // Sequence diagram-specific variables
+        mainBkg: "#FFD4BC", // Light Orange for main background (softer)
+        actorBkg: "#C9C4EF", // Light Purple for actor background (softer)
+        actorBorder: "#801ED7", // Purple for actor borders (brand pop)
+        actorTextColor: "#300266", // Dark Purple for actor text (anchor)
+        actorLineColor: "#300266", // Dark Purple for actor lines (anchor)
+        signalColor: "#300266", // Dark Purple for signals/arrows (anchor)
+        signalTextColor: "#91186E", // Dark Pink for signal text (subtle contrast)
+        labelBoxBkgColor: "#C9C4EF", // Light Purple for label box background
+        labelBoxBorderColor: "#801ED7", // Purple for label borders
+        labelTextColor: "#300266", // Dark Purple for label text
+        noteBkgColor: "#F8D3E8", // Light Pink for note background
+        noteBorderColor: "#FFA4FB", // Pink for note borders
+        noteTextColor: "#300266", // Dark Purple for note text
+        activationBkgColor: "#C9C4EF", // Light Purple for activation background
+        activationBorderColor: "#801ED7", // Purple for activation borders
+        loopTextColor: "#300266", // Dark Purple for loop text
+        sequenceNumberColor: "#300266", // Dark Purple for sequence numbers
+        errorBkgColor: "#F8D3E8", // Light Pink for error background
+        errorTextColor: "#300266", // Dark Purple for error text
+        
+        // General text and borders
+        textColor: "#300266", // Dark Purple for general text (anchor)
+        
         boxBorderOpacity: 0.1,
       };
 
       if (typeof mermaid !== 'undefined') {
         mermaid.initialize({
-          theme: "default",
+          theme: "base", // Use 'base' theme for custom themeVariables to work with flowcharts
           themeVariables: themeVariables,
           startOnLoad: false,
         });

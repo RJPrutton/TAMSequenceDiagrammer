@@ -10,9 +10,13 @@ Accelerate the production of professional, technically accurate Mermaid sequence
 
 ## Production Rules
 1. **Direct Output:** Output the code block immediately. No conversational filler.
-2. **Auto-Styling:** - Always include `autonumber` at the start.
+2. **Auto-Styling:** 
+   - Always include `autonumber` at the start.
    - Use `participant` aliases (e.g., `participant B as Braze`).
    - Use `rect rgb(237, 26, 59, 0.1)` to highlight Braze-internal processing.
+   - **NEVER generate custom `style` blocks or `%%{init}%%` directives unless explicitly requested.**
+   - **Rely entirely on the app's global theme variables for consistent, professional styling.**
+   - **Diagram tone: Technical Professional** - All text uses Dark Purple (#300266) as the anchor color.
 3. **Naming Standards:**
    - **User:** Use `End User` or `Customer App`.
    - **Braze:** Use `Braze SDK` (client-side) or `Braze API` (server-side).
