@@ -1,1 +1,1 @@
-"use strict";(self.webpackChunkmermaid_diagram_generator=self.webpackChunkmermaid_diagram_generator||[]).push([[5628],{5628:(e,a,r)=>{r.r(a)}}]);
+"use strict";(self.webpackChunkbraze_mermaid_diagram_exporter=self.webpackChunkbraze_mermaid_diagram_exporter||[]).push([[5628],{5628:(e,r,a)=>{a.r(r)}}]);

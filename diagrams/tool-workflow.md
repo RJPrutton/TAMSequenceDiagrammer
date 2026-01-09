@@ -1,13 +1,13 @@
 ```mermaid
 sequenceDiagram
     autonumber
-    participant TAM as TAM
+    participant User as User
     participant AI as AI Agent (Cursor)
     participant MCP as MCP (Context7)
     participant WA as Web App (Vercel)
 
-    Note over TAM,AI: Diagram Creation Phase
-    TAM->>AI: Prompts for sequence diagram
+    Note over User,AI: Diagram Creation Phase
+    User->>AI: Prompts for sequence diagram
     rect rgb(237, 26, 59, 0.1)
     AI->>MCP: Queries Mermaid documentation
     MCP-->>AI: Returns Mermaid syntax reference
@@ -18,26 +18,26 @@ sequenceDiagram
     AI->>AI: Encodes diagram to Base64
     AI->>AI: Creates URL with encoded diagram
     end
-    AI-->>TAM: Displays preview link
+    AI-->>User: Displays preview link
 
-    Note over TAM,WA: Diagram Viewing & Export Phase
-    TAM->>WA: Clicks preview link
+    Note over User,WA: Diagram Viewing & Export Phase
+    User->>WA: Clicks preview link
     WA->>WA: Decodes Base64 diagram
     WA->>WA: Renders Mermaid diagram
-    WA-->>TAM: Displays interactive diagram
+    WA-->>User: Displays interactive diagram
 
-    alt TAM exports diagram
-        TAM->>WA: Clicks export (PNG/SVG)
-        WA-->>TAM: Downloads diagram file
-    else TAM edits diagram directly
-        TAM->>WA: Edits diagram in web app
+    alt User exports diagram
+        User->>WA: Clicks export (PNG/SVG)
+        WA-->>User: Downloads diagram file
+    else User edits diagram directly
+        User->>WA: Edits diagram in web app
         WA->>WA: Updates diagram display
-        WA-->>TAM: Shows updated diagram
+        WA-->>User: Shows updated diagram
     end
 
-    opt TAM requests changes
-        Note over TAM,AI: Iteration Loop
-        TAM->>AI: Reprompts with edits/feedback
+    opt User requests changes
+        Note over User,AI: Iteration Loop
+        User->>AI: Reprompts with edits/feedback
         rect rgb(237, 26, 59, 0.1)
         AI->>MCP: Queries updated documentation
         MCP-->>AI: Returns updated reference
@@ -46,10 +46,10 @@ sequenceDiagram
         AI->>AI: Encodes new diagram to Base64
         AI->>AI: Creates new preview link
         end
-        AI-->>TAM: Displays updated preview link
-        TAM->>WA: Clicks new preview link
+        AI-->>User: Displays updated preview link
+        User->>WA: Clicks new preview link
         WA->>WA: Decodes and renders new diagram
-        WA-->>TAM: Displays updated diagram
+        WA-->>User: Displays updated diagram
     end
 ```
 

@@ -42,3 +42,8 @@ mermaid.initialize({
   themeVariables: themeVariables,
   startOnLoad: false, // Prevent automatic rendering on load
 });
+
+// Signal that mermaid is ready
+window.mermaidReady = true;
+// Dispatch a custom event to notify other scripts
+window.dispatchEvent(new CustomEvent('mermaidReady'));

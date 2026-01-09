@@ -26,6 +26,16 @@ var panzoomInstance;
 function onEditorReady() {
   // Function to update the Mermaid diagram
   window.updateDiagram = async function () {
+    // Check for mermaid (could be window.mermaid or just mermaid depending on build)
+    const mermaidLib = window.mermaid || (typeof mermaid !== 'undefined' ? mermaid : null);
+    
+    if (!mermaidLib) {
+      const diagramContainer = document.getElementById("mermaidDiagram");
+      diagramContainer.innerHTML = `<div style="color: red; padding: 20px;">Error: Mermaid library not loaded. Please refresh the page.</div>`;
+      console.error("Mermaid library not available. Check browser console for loading errors.");
+      return;
+    }
+
     const input = editor.getValue();
     const diagramContainer = document.getElementById("mermaidDiagram");
 
@@ -37,7 +47,7 @@ function onEditorReady() {
 
     // Render the new diagram using mermaid.render
     try {
-      const { svg } = await mermaid.render("diagramId", input);
+      const { svg } = await mermaidLib.render("diagramId", input);
       diagramContainer.innerHTML = svg;
       originalSvgData = svg;
       
@@ -98,7 +108,15 @@ function onEditorReady() {
   const storedCode = getMermaidCode();
   if (storedCode) {
     editor.setValue(storedCode);
-    updateDiagram();
+    // Wait a bit for mermaid to be ready before auto-rendering
+    setTimeout(() => {
+      const mermaidLib = window.mermaid || (typeof mermaid !== 'undefined' ? mermaid : null);
+      if (mermaidLib) {
+        updateDiagram();
+      } else {
+        console.warn("Mermaid not ready yet, diagram will render when you click 'Render Diagram'");
+      }
+    }, 500);
   }
 
   // Retrieve the font size from local storage and set it in the dropdown
@@ -164,69 +182,139 @@ function onEditorReady() {
       return;
     }
 
-    // Create an image element
-    const img = new Image();
+    const diagramContainer = document.getElementById("mermaidDiagram");
+    const svgElement = diagramContainer.querySelector("svg");
+    
+    if (!svgElement) {
+      alert("SVG element not found. Please render the diagram first.");
+      return;
+    }
 
-    // Set the SVG string as the source of the image
-    img.src =
-      "data:image/svg+xml;charset=utf-8," + encodeURIComponent(originalSvgData);
+    // Check if html2canvas is available (for flowcharts with foreignObject)
+    if (typeof html2canvas !== 'undefined') {
+      // Ensure the container is visible and in viewport
+      diagramContainer.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+      
+      // Wait a moment for any layout changes
+      setTimeout(() => {
+        // Use html2canvas to capture the container div (works better than SVG element directly)
+        // This works for both sequence diagrams and flowcharts
+        const rect = diagramContainer.getBoundingClientRect();
+        
+        // Get the actual SVG dimensions from viewBox if available
+        let targetWidth = rect.width;
+        let targetHeight = rect.height;
+        
+        if (svgElement) {
+          const viewBox = svgElement.getAttribute("viewBox");
+          if (viewBox) {
+            const [, , vbWidth, vbHeight] = viewBox.split(" ").map(Number);
+            if (vbWidth && vbHeight) {
+              targetWidth = vbWidth;
+              targetHeight = vbHeight;
+            }
+          } else {
+            const svgWidth = parseFloat(svgElement.getAttribute("width")) || rect.width;
+            const svgHeight = parseFloat(svgElement.getAttribute("height")) || rect.height;
+            targetWidth = svgWidth;
+            targetHeight = svgHeight;
+          }
+        }
+        
+        html2canvas(diagramContainer, {
+          backgroundColor: '#ffffff',
+          scale: 3, // Higher resolution
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+          width: Math.max(targetWidth, 800),
+          height: Math.max(targetHeight, 600)
+        }).then(function(canvas) {
+        canvas.toBlob(function(blob) {
+          if (!blob) {
+            // Fallback to original method
+            tryOriginalPngExport();
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "diagram.png";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, "image/png", 1.0);
+        }).catch(function(error) {
+          console.error("html2canvas failed, trying fallback:", error);
+          tryOriginalPngExport();
+        });
+      }, 100);
+    } else {
+      // Fallback to original method (works for sequence diagrams)
+      tryOriginalPngExport();
+    }
 
-    img.onload = function () {
-      // Create a temporary SVG element to extract dimensions
-      const tempSvg = new DOMParser().parseFromString(
-        originalSvgData,
-        "image/svg+xml"
-      ).documentElement;
+    // Original method - works well for sequence diagrams
+    function tryOriginalPngExport() {
+      try {
+        const tempSvg = new DOMParser().parseFromString(
+          originalSvgData,
+          "image/svg+xml"
+        ).documentElement;
 
-      // Extract the viewBox attribute
-      const viewBox = tempSvg.getAttribute("viewBox");
-      if (!viewBox) {
-        console.error("No viewBox found in SVG!");
-        return;
+        const viewBox = tempSvg.getAttribute("viewBox");
+        if (!viewBox) {
+          alert("Unable to export as PNG. This diagram type may not support PNG export.\n\nPlease export as SVG instead.");
+          return;
+        }
+
+        const [minX, minY, viewBoxWidth, viewBoxHeight] = viewBox
+          .split(" ")
+          .map(Number);
+
+        const scaleFactor = 3;
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = viewBoxWidth * scaleFactor;
+        canvas.height = viewBoxHeight * scaleFactor;
+
+        context.fillStyle = "white";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.scale(scaleFactor, scaleFactor);
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        
+        img.onload = function () {
+          context.drawImage(img, minX, minY, viewBoxWidth, viewBoxHeight);
+          canvas.toBlob(function (blob) {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = "diagram.png";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            } else {
+              alert("PNG export failed. This may be due to browser security restrictions.\n\nPlease export as SVG instead.");
+            }
+          }, "image/png", 1.0);
+        };
+        
+        img.onerror = function (error) {
+          alert("PNG export is not supported for this diagram type (flowcharts with complex styling).\n\nPlease export as SVG instead.");
+          console.error("Failed to load SVG as image:", error);
+        };
+        
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(originalSvgData);
+      } catch (error) {
+        alert("PNG export failed: " + error.message + "\n\nPlease export as SVG instead.");
+        console.error("Error in PNG export:", error);
       }
-
-      // Parse the viewBox values
-      const [minX, minY, viewBoxWidth, viewBoxHeight] = viewBox
-        .split(" ")
-        .map(Number);
-
-      // Define the scale factor for higher resolution
-      const scaleFactor = 3;
-
-      // Calculate scaled dimensions
-      const width = viewBoxWidth * scaleFactor;
-      const height = viewBoxHeight * scaleFactor;
-
-      // Create a canvas element
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-
-      // Set canvas dimensions to the scaled dimensions
-      canvas.width = width;
-      canvas.height = height;
-
-      // Scale the context to the desired resolution
-      context.scale(scaleFactor, scaleFactor);
-
-      // Draw the image onto the canvas using viewBox dimensions
-      context.drawImage(img, minX, minY, viewBoxWidth, viewBoxHeight);
-
-      // Convert the canvas to a PNG data URL
-      canvas.toBlob(function (blob) {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "diagram.png";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      }, "image/png");
-    };
-
-    img.onerror = function () {
-      console.error("Failed to load SVG as image");
-    };
+    }
   }
 
   // Function to update the font size of the editor input

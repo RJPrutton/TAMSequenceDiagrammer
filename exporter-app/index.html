@@ -11,10 +11,59 @@
     />
     <link id="stylesheet" rel="stylesheet" href="styles/styles.css" />
     <script src="https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js"></script>
-    <script type="module" src="/scripts/mermaid_init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
     <script type="module">
       import monacoMermaid from "https://cdn.skypack.dev/monaco-mermaid";
       window.monacoMermaid = monacoMermaid; // Expose it globally if needed
+    </script>
+    <script>
+      // Initialize Mermaid with theme configuration
+      const themeVariables = {
+        darkMode: false,
+        background: "#ffffff",
+        fontFamily: "helvetica neue, helvetica, arial, sans-serif",
+        fontSize: "16px",
+        primaryColor: "#fff4dd",
+        primaryTextColor: "#300266",
+        secondaryColor: "#c9c4ef",
+        primaryBorderColor: "#300266",
+        secondaryBorderColor: "#ffd4bc",
+        noteBkgColor: "#ffe5b4",
+        noteTextColor: "#333333",
+        noteBorderColor: "#ffa524",
+        lineColor: "#300266",
+        textColor: "#300266",
+        mainBkg: "#c9c4ef",
+        errorBkgColor: "#f8d3e8",
+        errorTextColor: "#91186e",
+        actorBkg: "#c9c4ef",
+        actorBorder: "#300266",
+        actorTextColor: "#300266",
+        actorLineColor: "#f8d3e8",
+        signalColor: "#300266",
+        signalTextColor: "#300266",
+        labelBoxBkgColor: "#ffe0b2",
+        labelBoxBorderColor: "#ffd4bc",
+        labelTextColor: "#300266",
+        loopTextColor: "#300266",
+        activationBorderColor: "#91186E",
+        activationBkgColor: "#f8d3e8",
+        sequenceNumberColor: "#300266",
+        boxBorderOpacity: 0.1,
+      };
+
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({
+          theme: "default",
+          themeVariables: themeVariables,
+          startOnLoad: false,
+        });
+        window.mermaidReady = true;
+        window.dispatchEvent(new CustomEvent('mermaidReady'));
+      } else {
+        console.error('Mermaid library failed to load');
+      }
     </script>
   </head>
   <body>

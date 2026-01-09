@@ -5,7 +5,7 @@ Accelerate the production of professional, technically accurate Mermaid sequence
 
 ## Primary Knowledge Sources
 1. **Live Documentation (MCP):** Use the MCP tool to query `https://context7.com/` for:
-   - Latest Mermaid Sequence Diagram syntax.
+   - Latest Mermaid Diagram syntax.
    - Braze API endpoint details and architectural best practices.
 
 ## Production Rules
