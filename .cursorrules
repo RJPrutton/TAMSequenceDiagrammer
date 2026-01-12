@@ -26,10 +26,28 @@ Accelerate the production of professional, technically accurate Mermaid sequence
 ## System Awareness
 - You are managing a two-part system: the **Builder** (AI prompt logic) and the **Exporter** (Web App).
 
+## Diagram Persistence
+**ALWAYS save diagrams to the `diagrams/` folder** whenever creating a new diagram.
+- **File Location:** Save to `diagrams/` directory in the workspace root
+- **File Naming:** Use descriptive, kebab-case filenames (e.g., `web-push-registration.md`, `braze-currents-cdp-integration.md`)
+- **File Format:** Markdown file containing the Mermaid code block wrapped in triple backticks with `mermaid` language tag
+- **Example Format:**
+  ```markdown
+  ```mermaid
+  sequenceDiagram
+      autonumber
+      ...
+  ```
+  ```
+
 ## Exporter App Link
 At the end of every response with a diagram, provide a clickable markdown link to the exporter app.
 - Base URL: `https://tam-sequence-diagrammer.vercel.app`
-- **Logic:** The Mermaid code must be Base64 encoded (URL-safe) and appended to the base URL.
+- **Encoding Logic (CRITICAL):** 
+  - First, encode the Mermaid code using **standard Base64** (NOT URL-safe Base64)
+  - Then, URL-encode the Base64 string using `encodeURIComponent()` or equivalent
+  - This matches the app's decoding logic which expects: `decodeURIComponent()` then `atob()`
+  - Example: `base64.b64encode(code.encode()).decode()` then `urllib.parse.quote(encoded, safe='')`
 - **Format:** Use markdown link format: `[Direct Preview Link](https://tam-sequence-diagrammer.vercel.app/?code=ENCODED_CODE)`
 - The encoded string must NOT include triple backticks (```) or markdown formatting.
 - Only provide the local app link, NOT mermaid.live links.
