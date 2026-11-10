@@ -7,9 +7,8 @@ A specialized tool for Braze TAMs to quickly generate, view, and export professi
 ```
 TAMSequenceDiagrammer/
 ├── diagrams/              # Example Mermaid diagrams + outputted Mermaid diagrams
-├── skill/                 # Claude skill used to generate diagrams
-│   ├── braze-sequence-diagrammer.skill   # Download this file to install the skill
-│   └── SKILL.md           # Readable copy of the skill's instructions
+├── skill/
+│   └── SKILL.md           # Readable copy of the Claude skill's instructions
 └── exporter-app/          # Web application for viewing/exporting diagrams
     ├── assets/            # Branding assets
     ├── dist/              # Built application (generated)
@@ -21,13 +20,11 @@ TAMSequenceDiagrammer/
 
 ## Quick Start
 
-### 1. Download and Install the Skill
+### 1. Get the Skill
 
-Diagram generation is handled by the **braze-sequence-diagrammer** Claude skill.
+Diagram generation is handled by the **braze-sequence-diagrammer** skill in Claude. Find it in Claude skills and enable it. The rules it follows are also readable in [`skill/SKILL.md`](https://github.com/RJPrutton/TAMSequenceDiagrammer/blob/main/skill/SKILL.md).
 
-1. **Download the skill file:** [braze-sequence-diagrammer.skill](https://github.com/RJPrutton/TAMSequenceDiagrammer/raw/main/skill/braze-sequence-diagrammer.skill). (You can also open the `skill/` folder in this repo and use the download button on the file's page.)
-2. **Add it to Claude:** upload the `.skill` file in Claude's skills settings. Menu names may vary depending on your Claude app and organization settings.
-3. Ask for the flow you want, for example:
+Then ask Claude for the flow you want, for example:
 
 > "Diagram the web push registration flow"
 
